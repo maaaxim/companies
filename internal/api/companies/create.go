@@ -2,6 +2,7 @@ package companiesController
 
 import (
 	"github.com/any/companies/internal/api"
+	"github.com/any/companies/internal/services/companyService"
 	"net/http"
 )
 
@@ -36,6 +37,36 @@ func (c Controller) CreateHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+	dto := c.makeCreateCompanyDto(
+		createRequest.Name,
+		createRequest.Description,
+		createRequest.EmployeesAmount,
+		createRequest.Registered,
+		createRequest.Type,
+	)
+	uuid, err := c.companiesService.CreateCompany(dto)
+	if err != nil {
+		c.WriteErrorResponse(w, err)
 
-	api.WriteSuccessResponse(w, "Uuid code new one")
+		return
+	}
+
+	api.WriteSuccessResponse(w, uuid)
+}
+
+func (c Controller) makeCreateCompanyDto(
+	name string,
+	description string,
+	employeesAmount int,
+	registered bool,
+	theType string,
+) companyService.CompanyDto {
+	dto := companyService.CompanyDto{
+		Name:            name,
+		Description:     description,
+		EmployeesAmount: employeesAmount,
+		Registered:      registered,
+		Type:            theType,
+	}
+	return dto
 }

@@ -24,14 +24,20 @@ func (c Controller) GetHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uuid := vars["uuid"]
 
-	// @TODO service
+	m, err := c.companiesService.GetCompany(uuid)
+	if err != nil {
+		c.WriteErrorResponse(w, err)
+
+		return
+	}
+
 	getResponse := GetResponse{
 		Uuid:            uuid,
-		Name:            "2",
-		Description:     "3",
-		EmployeesAmount: 4,
-		Registered:      false,
-		Type:            "5555",
+		Name:            m.Name,
+		Description:     m.Description,
+		EmployeesAmount: m.EmployeesAmount,
+		Registered:      m.Registered,
+		Type:            m.Type,
 	}
 
 	api.WriteSuccessResponse(w, getResponse)

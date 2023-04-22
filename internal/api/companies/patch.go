@@ -1,14 +1,13 @@
 package companiesController
 
 import (
-	"errors"
+	"github.com/gorilla/mux"
 	"net/http"
 
 	"github.com/any/companies/internal/api"
 )
 
 type PatchRequest struct {
-	Id              string `json:"id" validate:"required"`
 	Name            string `json:"name" validate:"optional"`
 	Description     string `json:"description" validate:"optional"`
 	EmployeesAmount int    `json:"employeesAmount" validate:"optional"`
@@ -19,19 +18,29 @@ type PatchRequest struct {
 // @TODO check validations best practices
 func (r PatchRequest) Validate() []error {
 	var errs []error
-	if len(r.Id) <= 0 {
-		errs = append(errs, errors.New("wrong id"))
-	}
-
+	// @TODO description check
 	return errs
 }
 
 func (c Controller) PatchHandler(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
-	//uuid := vars["uuid"]
+	vars := mux.Vars(r)
+	uuid := vars["uuid"]
 
 	patchRequest := PatchRequest{}
 	if !api.ValidateRequest(&patchRequest, w, r) {
+
+		return
+	}
+	dto := c.makeCreateCompanyDto(
+		patchRequest.Name,
+		patchRequest.Description,
+		patchRequest.EmployeesAmount,
+		patchRequest.Registered,
+		patchRequest.Type,
+	)
+	err := c.companiesService.UpdateCompany(uuid, dto)
+	if err != nil {
+		c.WriteErrorResponse(w, err)
 
 		return
 	}

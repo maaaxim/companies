@@ -8,6 +8,8 @@ import (
 	"github.com/any/companies/internal/config"
 	"github.com/any/companies/internal/infr/logger"
 	"github.com/any/companies/internal/infr/server"
+	"github.com/any/companies/internal/repositories/postgres"
+	"github.com/any/companies/internal/services/companyService"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"os"
@@ -29,11 +31,16 @@ func main() {
 		panic(errors.Wrap(err, "init logger error"))
 	}
 
+	postgresRepository, err := postgres.NewPostgresRepository(cfg.Postgres)
+	if err != nil {
+		l.Fatal("init database error", zap.Error(err))
+	}
+	companiesService := companyService.NewService(postgresRepository)
 	s, err := server.New(
 		cfg.Server,
 		l,
 		jwtController.NewController(l),
-		companiesController.NewController(l),
+		companiesController.NewController(l, companiesService),
 	)
 	if err != nil {
 		l.Fatal("init server error", zap.Error(err))
