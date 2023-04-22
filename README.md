@@ -5,7 +5,6 @@
 - For linters golangci-lint should be installed https://golangci-lint.run/usage/install/
 
 порядок
-- сделать апихи для круд компаний
 - создать сервис
 - создать репозиторий
 - прикрутить кафку

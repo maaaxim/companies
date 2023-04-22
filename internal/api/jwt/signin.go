@@ -16,17 +16,17 @@ var users = map[string]string{
 }
 
 type SigninRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 func (r SigninRequest) Validate() []error {
 	var errs []error
-	if len(r.Username) <= 0 {
-		errs = append(errs, errors.New("empty username"))
+	if len(r.Username) <= 3 {
+		errs = append(errs, errors.New("username must be longer then 3 symbols"))
 	}
-	if len(r.Password) <= 0 {
-		errs = append(errs, errors.New("empty password"))
+	if len(r.Password) <= 3 {
+		errs = append(errs, errors.New("password must be longer then 3 symbols"))
 	}
 
 	return errs

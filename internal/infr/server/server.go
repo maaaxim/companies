@@ -2,13 +2,14 @@ package server
 
 import (
 	"context"
-	jwtController "github.com/any/companies/internal/api/jwt"
-	"github.com/any/companies/internal/infr/logger"
+	companiesController "github.com/any/companies/internal/api/companies"
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"net/http"
 	"sync"
 
-	"github.com/gorilla/mux"
+	jwtController "github.com/any/companies/internal/api/jwt"
+	"github.com/any/companies/internal/infr/logger"
 )
 
 type Server struct {
@@ -20,21 +21,21 @@ func New(
 	cfg Config,
 	logger logger.Logger,
 	jwtController jwtController.Controller,
+	companiesController companiesController.Controller,
 ) (Server, error) {
 	r := mux.NewRouter()
 
 	/**** jwt ****/
-	r.HandleFunc(
-		"/api/jwt/signin",
-		jwtController.SigninHandler,
-	)
-
-	r.HandleFunc(
-		"/api/jwt/refresh",
-		jwtController.RefreshHandler,
-	)
+	r.HandleFunc("/api/jwt/signin", jwtController.SigninHandler)
+	r.HandleFunc("/api/jwt/refresh", jwtController.RefreshHandler)
 
 	// r.Use(api.JsonMiddleware)
+
+	/**** companies ****/
+	r.HandleFunc("/api/companies/{uuid}", companiesController.GetHandler).Methods(http.MethodGet)
+	r.HandleFunc("/api/companies", companiesController.CreateHandler).Methods(http.MethodPost)
+	r.HandleFunc("/api/companies/{uuid}", companiesController.PatchHandler).Methods(http.MethodPatch) // or PUT?
+	r.HandleFunc("/api/companies/{uuid}", companiesController.DeleteHandler).Methods(http.MethodDelete)
 
 	httpServer := &http.Server{
 		Addr:         cfg.getHttpAddr(),

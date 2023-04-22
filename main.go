@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	companiesController "github.com/any/companies/internal/api/companies"
 	jwtController "github.com/any/companies/internal/api/jwt"
 	"github.com/any/companies/internal/config"
 	"github.com/any/companies/internal/infr/logger"
@@ -28,9 +29,12 @@ func main() {
 		panic(errors.Wrap(err, "init logger error"))
 	}
 
-	cont := jwtController.NewController(l)
-
-	s, err := server.New(cfg.Server, l, cont)
+	s, err := server.New(
+		cfg.Server,
+		l,
+		jwtController.NewController(l),
+		companiesController.NewController(l),
+	)
 	if err != nil {
 		l.Fatal("init server error", zap.Error(err))
 	}
