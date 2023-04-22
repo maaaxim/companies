@@ -34,7 +34,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "BROKER://kafka.companies:9092,LISTENER://localhost:19092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "BROKER:PLAINTEXT,LISTENER:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: "BROKER"
-      KAFKA_CREATE_TOPICS: "companies.created:1:1,companies.updated:1:1,companies.deleted:1:1"
+      KAFKA_CREATE_TOPICS: "companies.events:1:1"
   # Kafka UI localhost:8086
   kafka-ui.companies:
     container_name: kafka-ui.companies

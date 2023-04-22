@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/any/companies/internal/domain/models"
+	"github.com/any/companies/internal/services/common/events"
 )
 
 func (s Service) CreateCompany(company CompanyDto) (string, error) {
@@ -20,5 +21,10 @@ func (s Service) CreateCompany(company CompanyDto) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	s.eventsPublisher.GoPublishEvent(
+		events.NewCompanyUpdatedEvent(companyModel),
+	)
+
 	return companyUuid.String(), nil
 }

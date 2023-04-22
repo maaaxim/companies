@@ -35,7 +35,7 @@ func (e Env) validate() error {
 
 type Config struct {
 	Env         Env                     `envconfig:"ENV" default:"test"`
-	AppId       string                  `envconfig:"ID" default:"collections-service"`
+	AppId       string                  `envconfig:"ID" default:"companies"`
 	Server      server.Config           `envconfig:"SERVER" required:"true"`
 	Logger      logger.Config           `envconfig:"LOGGER" required:"true"`
 	Postgres    database.PostgresConfig `envconfig:"COMPANIES_DATABASE" required:"true" vault:"postgres/"`

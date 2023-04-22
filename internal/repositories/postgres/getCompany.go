@@ -33,7 +33,7 @@ func (r Repository) GetCompany(uuid string) (models.Company, error) {
 
 	company = convertCompanyFromDb(dbCompany)
 	if err != nil {
-		return company, errors.Wrap(err, "convertCollectionFromDb")
+		return company, errors.Wrap(err, "convertCompanyFromDb")
 	}
 
 	return company, nil

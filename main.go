@@ -6,6 +6,8 @@ import (
 	companiesController "github.com/any/companies/internal/api/companies"
 	jwtController "github.com/any/companies/internal/api/jwt"
 	"github.com/any/companies/internal/config"
+	"github.com/any/companies/internal/dataBus"
+	"github.com/any/companies/internal/infr/kafka"
 	"github.com/any/companies/internal/infr/logger"
 	"github.com/any/companies/internal/infr/server"
 	"github.com/any/companies/internal/repositories/postgres"
@@ -35,7 +37,17 @@ func main() {
 	if err != nil {
 		l.Fatal("init database error", zap.Error(err))
 	}
-	companiesService := companyService.NewService(postgresRepository)
+
+	k, err := kafka.InitWriter(cfg.KafkaWriter)
+	if err != nil {
+		panic(errors.Wrap(err, "init kafka error"))
+	}
+
+	companiesService := companyService.NewService(
+		postgresRepository,
+		dataBus.NewKafkaEventsPublisher(k, l),
+	)
+
 	s, err := server.New(
 		cfg.Server,
 		l,

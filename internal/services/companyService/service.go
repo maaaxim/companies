@@ -2,11 +2,12 @@ package companyService
 
 import (
 	"github.com/any/companies/internal/domain/models"
+	"github.com/any/companies/internal/services/common/events"
 )
 
 type Service struct {
-	repository companyRepository
-	//eventsPublisher eventsPublisher
+	repository      companyRepository
+	eventsPublisher events.EventsPublisher
 }
 
 type companyRepository interface {
@@ -16,22 +17,13 @@ type companyRepository interface {
 	DeleteCompany(uuid string) error
 }
 
-//type Event interface {
-//	GetName() string
-//	Marshal() ([]byte, error)
-//}
-//
-//type eventsPublisher interface {
-//	GoPublishEvent(event Event)
-//}
-
 func NewService(
 	repository companyRepository,
-	// eventsPublisher eventsPublisher,
+	eventsPublisher events.EventsPublisher,
 ) Service {
 	return Service{
-		repository: repository,
-		//eventsPublisher: eventsPublisher,
+		repository:      repository,
+		eventsPublisher: eventsPublisher,
 	}
 }
 
