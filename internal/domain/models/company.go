@@ -6,7 +6,7 @@ type Company struct {
 	Description     string
 	EmployeesAmount int
 	Registered      bool
-	Type            string // @TODO
+	Type            CompanyType
 }
 
 func NewCompany(
@@ -15,7 +15,7 @@ func NewCompany(
 	Description string,
 	EmployeesAmount int,
 	Registered bool,
-	Type string, // @TODO
+	Type CompanyType,
 ) (Company, error) {
 	return Company{
 		Uuid:            Uuid,
@@ -32,7 +32,7 @@ func (c *Company) Update(
 	Description string,
 	EmployeesAmount int,
 	Registered bool,
-	Type string, // @TODO
+	Type CompanyType,
 ) {
 	c.Name = Name
 	c.Description = Description

@@ -37,7 +37,7 @@ func (c Controller) GetHandler(w http.ResponseWriter, r *http.Request) {
 		Description:     m.Description,
 		EmployeesAmount: m.EmployeesAmount,
 		Registered:      m.Registered,
-		Type:            m.Type,
+		Type:            m.Type.Value(),
 	}
 
 	api.WriteSuccessResponse(w, getResponse)

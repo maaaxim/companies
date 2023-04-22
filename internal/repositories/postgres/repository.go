@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/pkg/errors"
 
 	"github.com/any/companies/internal/domain/models"
 	"github.com/any/companies/internal/infr/database"
@@ -61,17 +62,23 @@ func convertCompanyModelToDb(company models.Company) DbCompany {
 		Description:     company.Description,
 		EmployeesAmount: company.EmployeesAmount,
 		Registered:      company.Registered,
-		Type:            company.Type,
+		Type:            company.Type.Value(),
 	}
 }
 
-func convertCompanyFromDb(company DbCompany) models.Company {
-	return models.Company{
-		Uuid:            company.Uuid,
-		Name:            company.Name,
-		Description:     company.Description,
-		EmployeesAmount: company.EmployeesAmount,
-		Registered:      company.Registered,
-		Type:            company.Type,
+func convertCompanyFromDb(company DbCompany) (models.Company, error) {
+	var m models.Company
+	companyType, err := models.NewCompanyTypeFromString(company.Type)
+	if err != nil {
+
+		return m, errors.Wrap(err, "NewCompanyTypeFromString")
 	}
+	m.Uuid = company.Uuid
+	m.Name = company.Name
+	m.Description = company.Description
+	m.EmployeesAmount = company.EmployeesAmount
+	m.Registered = company.Registered
+	m.Type = companyType
+
+	return m, nil
 }

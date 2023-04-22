@@ -7,8 +7,6 @@
 - For linters golangci-lint should be installed https://golangci-lint.run/usage/install/
 
 порядок
-- прикрутить кафку
-- сделать списки типов
 - защитить методы по авторизации
 - логи
 - перепроверить все

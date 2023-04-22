@@ -31,7 +31,7 @@ func (r Repository) GetCompany(uuid string) (models.Company, error) {
 		return company, errors.Wrap(err, "StructScan")
 	}
 
-	company = convertCompanyFromDb(dbCompany)
+	company, err = convertCompanyFromDb(dbCompany)
 	if err != nil {
 		return company, errors.Wrap(err, "convertCompanyFromDb")
 	}
