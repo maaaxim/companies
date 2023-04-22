@@ -1,0 +1,46 @@
+version: '3'
+services:
+  postgres.companies:
+    container_name: postgres.companies
+    image: library/postgres:13
+    restart: on-failure
+    ports:
+      - "54321:5432"
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      # hack to save data locally
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+      - "./postgres.conf:/etc/postgresql/postgresql.conf"
+  zookeeper.companies:
+    container_name: zookeeper.companies
+    image: wurstmeister/zookeeper
+    ports:
+      - "2182:2181"
+  kafka.companies:
+    container_name: kafka.companies
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper.companies
+    ports:
+      - "19092:19092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper.companies:2181
+      KAFKA_LISTENERS: "BROKER://:9092,LISTENER://:19092"
+      KAFKA_ADVERTISED_LISTENERS: "BROKER://kafka.companies:9092,LISTENER://localhost:19092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "BROKER:PLAINTEXT,LISTENER:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "BROKER"
+      KAFKA_CREATE_TOPICS: "companies.created:1:1,companies.updated:1:1,companies.deleted:1:1"
+  # Kafka UI localhost:8086
+  kafka-ui.companies:
+    container_name: kafka-ui.companies
+    image: quay.io/cloudhut/kowl:master
+    ports:
+      - "8086:8080"
+    depends_on:
+      - kafka.companies
+    environment:
+      KAFKA_BROKERS: "kafka.companies:9092"

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/any/companies/internal/api"
+	jwtController "github.com/any/companies/internal/api/jwt"
 	"github.com/any/companies/internal/infr/logger"
 	"github.com/pkg/errors"
 	"net/http"
@@ -19,17 +19,22 @@ type Server struct {
 func New(
 	cfg Config,
 	logger logger.Logger,
-	controller api.Controller,
+	jwtController jwtController.Controller,
 ) (Server, error) {
 	r := mux.NewRouter()
 
-	/**** nodes ****/
+	/**** jwt ****/
 	r.HandleFunc(
-		"/api/test",
-		controller.SomeHandler,
+		"/api/jwt/signin",
+		jwtController.SigninHandler,
 	)
 
-	//r.Use(api.JsonMiddleware)
+	r.HandleFunc(
+		"/api/jwt/refresh",
+		jwtController.RefreshHandler,
+	)
+
+	// r.Use(api.JsonMiddleware)
 
 	httpServer := &http.Server{
 		Addr:         cfg.getHttpAddr(),

@@ -54,7 +54,3 @@ func writeResponse(writer http.ResponseWriter, response any) {
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(response) //nolint:errcheck
 }
-
-func (c Controller) SomeHandler(writer http.ResponseWriter, request *http.Request) {
-
-}

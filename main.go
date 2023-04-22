@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/any/companies/internal/api"
+	jwtController "github.com/any/companies/internal/api/jwt"
 	"github.com/any/companies/internal/config"
 	"github.com/any/companies/internal/infr/logger"
 	"github.com/any/companies/internal/infr/server"
@@ -28,7 +28,7 @@ func main() {
 		panic(errors.Wrap(err, "init logger error"))
 	}
 
-	cont := api.NewController(l)
+	cont := jwtController.NewController(l)
 
 	s, err := server.New(cfg.Server, l, cont)
 	if err != nil {

@@ -29,9 +29,9 @@ func (e Env) validate() error {
 	return nil
 }
 
-func (e Env) toString() string {
-	return string(e)
-}
+// func (e Env) toString() string {
+//	return string(e)
+// }
 
 type Config struct {
 	Env         Env                     `envconfig:"ENV" default:"test"`
