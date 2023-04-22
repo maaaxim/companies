@@ -1,7 +1,6 @@
 package jwtController
 
 import (
-	"github.com/golang-jwt/jwt"
 	"os"
 
 	"github.com/any/companies/internal/api"
@@ -20,9 +19,4 @@ func NewController(
 	return Controller{
 		api.NewController(logger),
 	}
-}
-
-type Claims struct {
-	Username string `json:"username"`
-	jwt.StandardClaims
 }

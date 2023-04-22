@@ -23,19 +23,22 @@ func New(
 	jwtController jwtController.Controller,
 	companiesController companiesController.Controller,
 ) (Server, error) {
+
 	r := mux.NewRouter()
 
 	/**** jwt ****/
 	r.HandleFunc("/api/jwt/signin", jwtController.SigninHandler)
 	r.HandleFunc("/api/jwt/refresh", jwtController.RefreshHandler)
 
-	// r.Use(api.JsonMiddleware)
-
 	/**** companies ****/
 	r.HandleFunc("/api/companies/{uuid}", companiesController.GetHandler).Methods(http.MethodGet)
-	r.HandleFunc("/api/companies", companiesController.CreateHandler).Methods(http.MethodPost)
-	r.HandleFunc("/api/companies/{uuid}", companiesController.PatchHandler).Methods(http.MethodPatch) // or PUT?
-	r.HandleFunc("/api/companies/{uuid}", companiesController.DeleteHandler).Methods(http.MethodDelete)
+
+	/**** protected companies ****/
+	protected := r.Methods(http.MethodPost, http.MethodPatch, http.MethodDelete).Subrouter()
+	protected.Use(jwtController.JwtVerify)
+	protected.HandleFunc("/api/companies", companiesController.CreateHandler).Methods(http.MethodPost)
+	protected.HandleFunc("/api/companies/{uuid}", companiesController.PatchHandler).Methods(http.MethodPatch)
+	protected.HandleFunc("/api/companies/{uuid}", companiesController.DeleteHandler).Methods(http.MethodDelete)
 
 	httpServer := &http.Server{
 		Addr:         cfg.getHttpAddr(),

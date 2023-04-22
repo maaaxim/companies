@@ -3,10 +3,11 @@ package jwtController
 import (
 	"errors"
 	"fmt"
-	"github.com/any/companies/internal/api"
 	"github.com/golang-jwt/jwt"
 	"net/http"
 	"time"
+
+	"github.com/any/companies/internal/api"
 )
 
 // @TODO implement sign up if i have more time
@@ -47,7 +48,7 @@ func (c Controller) SigninHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	expirationTime := time.Now().Add(5 * time.Minute)
-	claims := &Claims{
+	claims := &api.Claims{
 		Username: signinRequest.Username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),

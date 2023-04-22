@@ -29,7 +29,7 @@ func (c Controller) RefreshHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tknStr := refreshRequest.Token
-	claims := &Claims{}
+	claims := &api.Claims{}
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return JwtKey, nil
 	})

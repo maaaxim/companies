@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/golang-jwt/jwt"
 	"net/http"
 
 	"github.com/any/companies/internal/infr/logger"
@@ -9,6 +10,11 @@ import (
 
 type Controller struct {
 	logger logger.Logger
+}
+
+type Claims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
 }
 
 func (c Controller) WriteErrorsResponse(writer http.ResponseWriter, errs []error) {
