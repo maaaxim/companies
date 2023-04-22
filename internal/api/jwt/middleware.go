@@ -14,17 +14,20 @@ func (c Controller) JwtVerify(next http.Handler) http.Handler {
 		if tknStr == "" {
 			w.WriteHeader(http.StatusForbidden)
 			c.WriteErrorResponse(w, fmt.Errorf("empty token"))
+
 			return
 		}
 
 		claims := &api.Claims{}
 		_, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+
 			return JwtKey, nil
 		})
 
 		if err != nil {
 			w.WriteHeader(http.StatusForbidden)
 			c.WriteErrorResponse(w, err)
+
 			return
 		}
 

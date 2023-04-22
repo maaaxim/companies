@@ -22,6 +22,10 @@ func (s Service) CreateCompany(company CompanyDto) (string, error) {
 		company.Registered,
 		companyType,
 	)
+	if err != nil {
+		return "", errors.Wrap(err, "NewCompany")
+	}
+
 	err = s.repository.CreateCompany(companyModel)
 	if err != nil {
 		return "", errors.Wrap(err, "CreateCompany")

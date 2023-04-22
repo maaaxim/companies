@@ -7,6 +7,10 @@ import (
 	"github.com/any/companies/internal/infr/logger"
 )
 
+const minUsername = 3
+const minPassword = 3
+const tokenLifetimeMinutes = 5
+
 var JwtKey = []byte(os.Getenv("JWT_KEY"))
 
 type Controller struct {

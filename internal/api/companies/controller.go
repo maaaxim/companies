@@ -6,6 +6,9 @@ import (
 	"github.com/any/companies/internal/services/companyService"
 )
 
+const maxDescription = 3000
+const maxName = 15
+
 type Controller struct {
 	api.Controller
 	companiesService companyService.Service

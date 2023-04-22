@@ -9,6 +9,9 @@ import (
 
 func (s Service) UpdateCompany(uuid string, dto CompanyDto) error {
 	modelCompany, err := s.repository.GetCompany(uuid)
+	if err != nil {
+		return errors.Wrap(err, "GetCompany")
+	}
 	companyType, err := models.NewCompanyTypeFromString(dto.Type)
 	if err != nil {
 		return errors.Wrap(err, "NewCompanyTypeFromString")

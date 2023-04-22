@@ -1,20 +1,12 @@
 package companiesController
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/any/companies/internal/api"
 	"github.com/any/companies/internal/services/companyService"
-	"net/http"
 )
-
-/*
-• ID (uuid) required
-• Name (15 characters) required - unique
-• Description (3000 characters) optional
-• Amount of Employees (int) required
-• Registered (boolean) required
-  @TODO enum
-• Type (Corporations | NonProfit | Cooperative | Sole Proprietorship) required
-*/
 
 type CreateRequest struct {
 	Name            string `json:"name" validate:"required"`
@@ -24,10 +16,16 @@ type CreateRequest struct {
 	Type            string `json:"type" validate:"required"`
 }
 
-// @TODO check validations best practices
 func (r CreateRequest) Validate() []error {
 	var errs []error
-	// validate description @TODO
+	if len(r.Description) <= maxDescription {
+		errs = append(errs, errors.New("description length must be less then 3001 symbols"))
+	}
+
+	if len(r.Name) <= maxName {
+		errs = append(errs, errors.New("name must be less then 16 symbols"))
+	}
+
 	return errs
 }
 
@@ -68,5 +66,6 @@ func (c Controller) makeCreateCompanyDto(
 		Registered:      registered,
 		Type:            theType,
 	}
+
 	return dto
 }

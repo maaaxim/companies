@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -33,7 +32,5 @@ func NewCompanyTypeFromString(typeValue string) (CompanyType, error) {
 		return CompanyTypeTagSoleProprietorship, nil
 	}
 
-	return CompanyTypeUnknown, errors.New(
-		fmt.Sprintf("unknown CompanyType value: %s", typeValue),
-	)
+	return CompanyTypeUnknown, fmt.Errorf("unknown CompanyType value: %s", typeValue)
 }

@@ -6,15 +6,17 @@ docker_up:
 run_main:
 	go run main.go
 
-# автогенерация, например для моков
-generate:
-	go generate ./...
+# @TODO
+#generate:
+#	go generate ./...
 
-tests:
-	go test -v ./...
+# @TODO
+#tests:
+#	go test -v ./...
 
-tests_failed:
-	 go test -v ./... | grep FAIL
+# @TODO
+#tests_failed:
+#   go test -v ./... | grep FAIL
 
 lint:
 	golangci-lint run

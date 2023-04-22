@@ -1,6 +1,7 @@
 package companiesController
 
 import (
+	"errors"
 	"github.com/gorilla/mux"
 	"net/http"
 
@@ -15,10 +16,16 @@ type PatchRequest struct {
 	Type            string `json:"type" validate:"optional"`
 }
 
-// @TODO check validations best practices
 func (r PatchRequest) Validate() []error {
 	var errs []error
-	// @TODO description check
+	if len(r.Description) <= maxDescription {
+		errs = append(errs, errors.New("description length must be less then 3001 symbols"))
+	}
+
+	if len(r.Name) <= maxName {
+		errs = append(errs, errors.New("name must be less then 16 symbols"))
+	}
+
 	return errs
 }
 

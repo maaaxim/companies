@@ -13,25 +13,19 @@ import (
 
 type Env string
 
-// @TODO актуализировать
 const (
-	ProdEnv  = Env("prod")  // продовое окружение
-	TestEnv  = Env("test")  // тестовое окружение
-	TestsEnv = Env("tests") // тесты
-	DevEnv   = Env("dev")   // разработка
+	ProdEnv = Env("prod")
+	TestEnv = Env("test")
+	DevEnv  = Env("dev")
 )
 
 func (e Env) validate() error {
-	if e != ProdEnv && e != TestEnv && e != DevEnv && e != TestsEnv {
+	if e != ProdEnv && e != TestEnv && e != DevEnv {
 		return errors.Errorf("unknown env value - %v", e)
 	}
 
 	return nil
 }
-
-// func (e Env) toString() string {
-//	return string(e)
-// }
 
 type Config struct {
 	Env         Env                     `envconfig:"ENV" default:"test"`

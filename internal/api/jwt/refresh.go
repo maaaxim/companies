@@ -15,7 +15,7 @@ type RefreshRequest struct {
 
 func (r RefreshRequest) Validate() []error {
 	var errs []error
-	if len(r.Token) <= 0 {
+	if len(r.Token) == 0 {
 		errs = append(errs, errors.New("empty token"))
 	}
 
@@ -25,24 +25,30 @@ func (r RefreshRequest) Validate() []error {
 func (c Controller) RefreshHandler(w http.ResponseWriter, r *http.Request) {
 	refreshRequest := RefreshRequest{}
 	if !api.ValidateRequest(&refreshRequest, w, r) {
+
 		return
 	}
 
 	tknStr := refreshRequest.Token
 	claims := &api.Claims{}
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+
 		return JwtKey, nil
 	})
 	if err != nil {
-		if err == jwt.ErrSignatureInvalid {
+
+		if errors.Is(err, jwt.ErrSignatureInvalid) {
 			w.WriteHeader(http.StatusUnauthorized)
+
 			return
 		}
 		w.WriteHeader(http.StatusBadRequest)
+
 		return
 	}
 	if !tkn.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
+
 		return
 	}
 
@@ -54,7 +60,7 @@ func (c Controller) RefreshHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(tokenLifetimeMinutes * time.Minute)
 	claims.ExpiresAt = expirationTime.Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(JwtKey)

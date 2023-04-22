@@ -10,33 +10,33 @@ type Company struct {
 }
 
 func NewCompany(
-	Uuid string,
-	Name string,
-	Description string,
-	EmployeesAmount int,
-	Registered bool,
-	Type CompanyType,
+	uuid string,
+	name string,
+	description string,
+	employeesAmount int,
+	registered bool,
+	companyType CompanyType,
 ) (Company, error) {
 	return Company{
-		Uuid:            Uuid,
-		Name:            Name,
-		Description:     Description,
-		EmployeesAmount: EmployeesAmount,
-		Registered:      Registered,
-		Type:            Type,
+		Uuid:            uuid,
+		Name:            name,
+		Description:     description,
+		EmployeesAmount: employeesAmount,
+		Registered:      registered,
+		Type:            companyType,
 	}, nil
 }
 
 func (c *Company) Update(
-	Name string,
-	Description string,
-	EmployeesAmount int,
-	Registered bool,
-	Type CompanyType,
+	name string,
+	description string,
+	employeesAmount int,
+	registered bool,
+	companyType CompanyType,
 ) {
-	c.Name = Name
-	c.Description = Description
-	c.EmployeesAmount = EmployeesAmount
-	c.Registered = Registered
-	c.Type = Type
+	c.Name = name
+	c.Description = description
+	c.EmployeesAmount = employeesAmount
+	c.Registered = registered
+	c.Type = companyType
 }

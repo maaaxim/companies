@@ -23,10 +23,10 @@ type SigninRequest struct {
 
 func (r SigninRequest) Validate() []error {
 	var errs []error
-	if len(r.Username) <= 3 {
+	if len(r.Username) <= minUsername {
 		errs = append(errs, errors.New("username must be longer then 3 symbols"))
 	}
-	if len(r.Password) <= 3 {
+	if len(r.Password) <= minPassword {
 		errs = append(errs, errors.New("password must be longer then 3 symbols"))
 	}
 
@@ -47,7 +47,7 @@ func (c Controller) SigninHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(tokenLifetimeMinutes * time.Minute)
 	claims := &api.Claims{
 		Username: signinRequest.Username,
 		StandardClaims: jwt.StandardClaims{
