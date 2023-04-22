@@ -3,6 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/pkg/errors"
+	"go.uber.org/zap"
+	"os"
+	"os/signal"
+	"syscall"
+
 	companiesController "github.com/any/companies/internal/api/companies"
 	jwtController "github.com/any/companies/internal/api/jwt"
 	"github.com/any/companies/internal/config"
@@ -12,11 +18,6 @@ import (
 	"github.com/any/companies/internal/infr/server"
 	"github.com/any/companies/internal/repositories/postgres"
 	"github.com/any/companies/internal/services/companyService"
-	"github.com/pkg/errors"
-	"go.uber.org/zap"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {

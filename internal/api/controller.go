@@ -17,12 +17,8 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (c Controller) WriteErrorsResponse(writer http.ResponseWriter, errs []error) {
-	c.logger.Errors(errs)
-	writeResponse(writer, newErrorsResponse(errs))
-}
-
 func (c Controller) WriteErrorResponse(writer http.ResponseWriter, err error) {
+	c.logger.Error(err.Error())
 	writeResponse(writer, newErrorsResponse([]error{err}))
 }
 

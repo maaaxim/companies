@@ -64,6 +64,5 @@
    - To run linters: make lint
 
 Backlog:
-- logging system
 - tests
 - storage for users, registration etc (but it depends on requirements)
