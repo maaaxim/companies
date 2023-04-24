@@ -18,12 +18,12 @@ type PatchRequest struct {
 
 func (r PatchRequest) Validate() []error {
 	var errs []error
-	if len(r.Description) <= maxDescription {
-		errs = append(errs, errors.New("description length must be less then 3001 symbols"))
+	if len(r.Description) > maxDescription {
+		errs = append(errs, errors.New("description length must be less then 3000 symbols"))
 	}
 
-	if len(r.Name) <= maxName {
-		errs = append(errs, errors.New("name must be less then 16 symbols"))
+	if len(r.Name) > maxName {
+		errs = append(errs, errors.New("name must be less then 15 symbols"))
 	}
 
 	return errs
